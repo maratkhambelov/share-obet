@@ -1,12 +1,18 @@
-import { useState } from 'react'
+import {useEffect} from 'react'
 import './App.css'
+// import WebApp from "@twa-dev/sdk";
 
 function App() {
-  const [count, setCount] = useState(0)
+  // const [count, setCount] = useState(0)
+
+    useEffect(() => {
+        // WebApp.ready();
+    }, [])
 
   return (
     <>
-        PRIVET
+        PRIVET!!!!!!!!!!!!!!
+        {/*User: {WebApp.initDataUnsafe.user?.first_name}*/}
     </>
   )
 }
