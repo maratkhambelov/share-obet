@@ -5,13 +5,13 @@ import './App.css'
 
 // export const tg = window.Telegram?.WebApp;
 //
+// https://www.npmjs.com/package/@ton/ton?utm_source=chatgpt.com
+// https://www.npmjs.com/package/@tonconnect/ui-react?utm_source=chatgpt.com
 
-import { init } from "@tma.js/sdk";
 import { postEvent, mainButton } from "@tma.js/sdk";
 import { useLaunchParams } from "@tma.js/sdk-react";
 
 
-init()
 
 function App() {
   // const [count, setCount] = useState(0)
