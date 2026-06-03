@@ -19,8 +19,10 @@ use crate::{
     infrastructure::repository::in_memory::commitment_repository::InMemoryCommitmentRepository,
     presentation::http::commitment::create_commitment::create_commitment,
     presentation::http::commitment::get_commitments::get_commitments,
+    presentation::http::commitment::get_commitment::get_commitment
 
 };
+use crate::application::get_commitment::GetCommitment;
 
 #[tokio::main]
 async fn main() {
@@ -36,10 +38,14 @@ async fn main() {
     let get_commitments_use_case  = Arc::new(
         GetCommitments::new(repository.clone()),
     );
+    let get_commitment_use_case  = Arc::new(
+        GetCommitment::new(repository.clone()),
+    );
 
     let state = Arc::new(AppState {
         create_commitment: create_commitment_use_case,
-        get_commitments: get_commitments_use_case
+        get_commitments: get_commitments_use_case,
+        get_commitment: get_commitment_use_case
     });
 
     let app = Router::new()
@@ -51,6 +57,10 @@ async fn main() {
         .route(
             "/commitments",
             get(get_commitments),
+        )
+        .route(
+            "/commitments/{id}",
+            get(get_commitment),
         )
         .with_state(state);
 

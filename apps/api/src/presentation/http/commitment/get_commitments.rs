@@ -10,7 +10,7 @@ use crate::domain::commitment::{
 
 
 #[derive(Serialize)]
-pub struct CommitmentListItemResponse {
+pub struct GetCommitmentListItemResponse {
     pub id: Uuid,
 
     pub title: String,
@@ -21,7 +21,7 @@ pub struct CommitmentListItemResponse {
 }
 
 
-impl From<Commitment> for CommitmentListItemResponse {
+impl From<Commitment> for GetCommitmentListItemResponse {
     fn from(commitment: Commitment) -> Self {
         Self {
             id: commitment.id,
@@ -34,7 +34,7 @@ impl From<Commitment> for CommitmentListItemResponse {
 
 #[derive(Serialize)]
 pub struct GetCommitmentsResponse {
-    pub items: Vec<CommitmentListItemResponse>,
+    pub items: Vec<GetCommitmentListItemResponse>,
 }
 
 pub async fn get_commitments(
@@ -48,7 +48,7 @@ pub async fn get_commitments(
 
     let items = commitment_vecs
         .into_iter()
-        .map(CommitmentListItemResponse::from)
+        .map(GetCommitmentListItemResponse::from)
         .collect();
 
 

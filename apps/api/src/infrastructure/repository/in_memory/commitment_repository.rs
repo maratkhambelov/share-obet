@@ -44,15 +44,15 @@ impl InMemoryCommitmentRepository {
             .cloned()
             .collect()
     }
-    // pub async fn get(
-    //     &self,
-    //     id: CommitmentId,
-    // ) -> Option<Commitment> {
-    //     let commitments =
-    //         self.commitments.read().await;
-    //
-    //     commitments.get(&id).cloned()
-    // }
+    pub async fn get(
+        &self,
+        id: CommitmentId,
+    ) -> Option<Commitment> {
+        let commitments =
+            self.commitments.read().await;
+    
+        commitments.get(&id).cloned()
+    }
     //
     // pub async fn list(
     //     &self,
