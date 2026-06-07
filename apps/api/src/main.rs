@@ -7,6 +7,7 @@ pub mod app_state;
 use std::sync::{Arc};
 use axum::{routing::get, Router};
 use axum::routing::post;
+use tower_http::cors::CorsLayer;
 
 async fn health() -> &'static str {
     "OK"
@@ -62,6 +63,7 @@ async fn main() {
             "/commitments/{id}",
             get(get_commitment),
         )
+        .layer(CorsLayer::permissive())
         .with_state(state);
 
     let listener = tokio::net::TcpListener::bind("0.0.0.0:3000")
@@ -74,6 +76,32 @@ async fn main() {
         .await
         .unwrap();
 }
+
+//TODO later
+
+//use axum::http::{
+//     HeaderValue,
+//     Method,
+// };
+// use tower_http::cors::CorsLayer;
+//
+// let cors = CorsLayer::new()
+//     .allow_origin(
+//         "http://localhost:5173"
+//             .parse::<HeaderValue>()
+//             .unwrap(),
+//     )
+//     .allow_methods([
+//         Method::GET,
+//         Method::POST,
+//         Method::PUT,
+//         Method::DELETE,
+//     ])
+//     .allow_headers(Any);
+//
+// let app = Router::new()
+//     .route("/commitments", get(get_commitments))
+//     .layer(cors);
 
 
 // 1. Создать структуру проекта
