@@ -1,6 +1,9 @@
-import { useState } from 'react'
+import { useCallback, useState } from 'react'
 
-import { useCommitmentQuery } from '@/entities/commitment'
+import {
+  useCommitmentQuery,
+  useCreateCommitmentMutation,
+} from '@/entities/commitment'
 
 import { Button } from '@/shared/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/card'
@@ -18,17 +21,36 @@ export const CommitmentPage = ({
 }: CommitmentPageProps) => {
   const isCreateMode = commitmentId === undefined
 
-  const { data: commitment, isLoading } = useCommitmentQuery(commitmentId)
-
+  const { data: commitment, isLoading } = useCommitmentQuery(
+    commitmentId ?? null,
+  )
+  const createCommitment = useCreateCommitmentMutation()
   const [title, setTitle] = useState('')
   const [description, setDescription] = useState('')
+
+  const handleCreate = useCallback(() => {
+    const TEMP_VERIFIER_ID = '550e8400-e29b-41d4-a716-446655440000'
+    const TEMP_WITNESS_IDS = [
+      '550e8400-e29b-41d4-a716-446655440001',
+      '550e8400-e29b-41d4-a716-446655440002',
+    ]
+
+    createCommitment.mutateAsync({
+      verifier_id: TEMP_VERIFIER_ID,
+      witness_ids: TEMP_WITNESS_IDS,
+      title,
+      description,
+      end_date: new Date().toISOString(),
+    }).then(() => {
+      onBack()
+    })
+  }, [createCommitment, description, onBack, title])
 
   if (isCreateMode) {
     return (
       <div className="mx-auto max-w-2xl space-y-6 p-6">
-        {' '}
         <Button variant="outline" onClick={onBack}>
-          Назад{' '}
+          Назад
         </Button>
         <Card>
           <CardHeader>
@@ -56,7 +78,12 @@ export const CommitmentPage = ({
               />
             </div>
 
-            <Button>Создать</Button>
+            <Button
+              onClick={handleCreate}
+              disabled={createCommitment.isPending}
+            >
+              {createCommitment.isPending ? 'Создание...' : 'Создать'}
+            </Button>
           </CardContent>
         </Card>
       </div>
@@ -66,9 +93,8 @@ export const CommitmentPage = ({
   if (isLoading) {
     return (
       <div className="mx-auto max-w-2xl p-6">
-        {' '}
         <Button variant="outline" onClick={onBack}>
-          Назад{' '}
+          Назад
         </Button>
         <p className="mt-4">Loading...</p>
       </div>
@@ -78,9 +104,8 @@ export const CommitmentPage = ({
   if (!commitment) {
     return (
       <div className="mx-auto max-w-2xl p-6">
-        {' '}
         <Button variant="outline" onClick={onBack}>
-          Назад{' '}
+          Назад
         </Button>
         <p className="mt-4">Commitment not found</p>
       </div>
@@ -89,9 +114,8 @@ export const CommitmentPage = ({
 
   return (
     <div className="mx-auto max-w-2xl space-y-6 p-6">
-      {' '}
       <Button variant="outline" onClick={onBack}>
-        Назад{' '}
+        Назад
       </Button>
       <Card>
         <CardHeader>

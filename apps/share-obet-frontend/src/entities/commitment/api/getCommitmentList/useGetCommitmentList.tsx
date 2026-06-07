@@ -5,6 +5,5 @@ import { runEffect } from '@/base/lib'
 export const useCommitmentsQuery = () =>
   useQuery({
     queryKey: commitmentKeys.all,
-
     queryFn: () => runEffect(getCommitmentList),
   })
