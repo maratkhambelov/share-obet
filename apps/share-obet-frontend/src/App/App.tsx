@@ -1,76 +1,48 @@
-import { useState, useMemo, useCallback, useEffect } from 'react'
+import { useState } from 'react'
+import { Match } from 'effect'
 
-// import { miniApp } from '@tma.js/sdk'
 import { CommitmentListPage, CommitmentPage } from '@/pages'
-import { Effect } from 'effect'
-
-//export const runEffect = <A, E>(
-//   effect: Effect.Effect<A, E>,
-// ) =>
-//   AppRuntime.runPromise(effect);
-//useQuery({
-//   queryKey: ["commitments"],
-//
-//   queryFn: () =>
-//     AppRuntime.runPromise(
-//       getCommitments,
-//     ),
-// });
 
 type Screen =
   | {
-      type: 'COMMITMENT_LIST'
-    }
+  type: 'COMMITMENT_LIST'
+}
   | {
-      type: 'COMMITMENT'
-      commitmentId?: string
-    }
+  type: 'COMMITMENT'
+  commitmentId?: string
+}
 
-
-
-//TODO: install https://effect.website/docs/getting-started/devtools/
 function App() {
-  const [count, setCount] = useState(0)
-
   const [screen, setScreen] = useState<Screen>({
     type: 'COMMITMENT_LIST',
   })
-  const task = useMemo(
-    () => Effect.sync(() => setCount((current) => current + 1)),
-    [setCount],
-  )
 
-
-  const increment = useCallback(() => Effect.runSync(task), [task])
-
-  useEffect(() => {
-    // miniApp.mount();
-    // miniApp.ready();
-  }, [])
-
-  switch (screen.type) {
-    case 'COMMITMENT_LIST':
-      return (
-        <>
-          <button onClick={increment}>count is {count}</button>
-          <CommitmentListPage
-            // onCreate={() =>
-            //   setScreen({
-            //     type: 'COMMITMENT',
-            //   })
-            // }
-            // onOpen={(commitmentId) =>
-            //   setScreen({
-            //     type: 'COMMITMENT',
-            //     commitmentId,
-            //   })
-            // }
-          />
-        </>
-      )
-
-    case 'COMMITMENT':
-      return (
+  return Match.value(screen).pipe(
+    Match.when(
+      {
+        type: 'COMMITMENT_LIST',
+      },
+      () => (
+        <CommitmentListPage
+          onCreate={() =>
+            setScreen({
+              type: 'COMMITMENT',
+            })
+          }
+          onOpen={(commitmentId) =>
+            setScreen({
+              type: 'COMMITMENT',
+              commitmentId,
+            })
+          }
+        />
+      ),
+    ),
+    Match.when(
+      {
+        type: 'COMMITMENT',
+      },
+      (screen) => (
         <CommitmentPage
           commitmentId={screen.commitmentId}
           onBack={() =>
@@ -79,12 +51,13 @@ function App() {
             })
           }
         />
-      )
-  }
+      ),
+    ),
+    Match.exhaustive,
+  )
 }
 
 export default App
-
 
 
 // import {useEffect} from 'react'

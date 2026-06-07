@@ -1,37 +1,49 @@
-import {  useState } from 'react'
+import { Button } from '@/shared/ui/button'
+import { useCommitmentsQuery } from '@/entities/commitment'
 
-import { useCommitmentsQuery, useCommitmentQuery } from '@/entities/commitment'
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+} from '@/shared/ui/card'
 
-export const CommitmentListPage = () => {
-  const [selectedId, setSelectedId] = useState<string | null>(null)
+type CommitmentListPageProps = {
+  readonly onCreate: () => void
+  readonly onOpen: (
+    commitmentId: string,
+  ) => void
+}
 
-  const { data: commitments = [] } = useCommitmentsQuery()
-
-  const { data: selectedCommitment, isLoading } = useCommitmentQuery(selectedId)
+export const CommitmentListPage = ({
+                                     onCreate,
+                                     onOpen,
+                                   }: CommitmentListPageProps) => {
+  const { data: commitments = [] } =
+    useCommitmentsQuery()
 
   return (
-    <div>
+    <div className="space-y-6">
+      <Button onClick={onCreate}>
+        Создать обязательство
+      </Button>
+
       <h1>Commitments</h1>
 
-      <ul>
+      <div className="space-y-4">
         {commitments.map((commitment) => (
-          <li key={commitment.id}>
-            <button type="button" onClick={() => setSelectedId(commitment.id)}>
-              {commitment.title}
-            </button>
-          </li>
+          <Card key={commitment.id}>
+            <CardHeader>
+              <CardTitle
+                onClick={() =>
+                  onOpen(commitment.id)
+                }
+              >
+                {commitment.title}
+              </CardTitle>
+            </CardHeader>
+          </Card>
         ))}
-      </ul>
-
-      {isLoading && <p>Loading...</p>}
-
-      {selectedCommitment && (
-        <section>
-          <h2>{selectedCommitment.title}</h2>
-
-          <p>{selectedCommitment.description}</p>
-        </section>
-      )}
+      </div>
     </div>
   )
 }
