@@ -12,8 +12,8 @@ export const CreateCommitmentSchema = Schema.Struct({
 
 export type CreateCommitment = Schema.Schema.Type<typeof CreateCommitmentSchema>
 
-export const createCommitment = (request: CreateCommitment) =>
-  HttpClient.pipe(
+export const createCommitment = (request: CreateCommitment) => {
+  const effect = HttpClient.pipe(
     Effect.flatMap((http) =>
       http.request({
         headers: {
@@ -34,3 +34,6 @@ export const createCommitment = (request: CreateCommitment) =>
       ),
     ),
   )
+
+  return effect
+}

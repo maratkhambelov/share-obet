@@ -349,6 +349,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@effect/language-service@npm:^0.86.2":
+  version: 0.86.2
+  resolution: "@effect/language-service@npm:0.86.2"
+  bin:
+    effect-language-service: cli.js
+  checksum: 10c0/fe27ac518e1aa292d5badb0c055fbebf6d6bb75758a6a169d9d7ea5dff8a58a89f486331cc520f8427a7fff596497c3bbae40f1e65b2165c3beca07cfe9f168c
+  languageName: node
+  linkType: hard
+
 "@emnapi/core@npm:1.10.0, @emnapi/core@npm:^1.10.0":
   version: 1.10.0
   resolution: "@emnapi/core@npm:1.10.0"
@@ -5823,6 +5832,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "share-obet-frontend@workspace:."
   dependencies:
+    "@effect/language-service": "npm:^0.86.2"
     "@eslint/js": "npm:^10.0.1"
     "@fontsource-variable/geist": "npm:^5.2.9"
     "@tailwindcss/vite": "npm:^4.3.0"
