@@ -1,42 +1,13 @@
-import { useEffect, useState } from 'react'
+import {  useState } from 'react'
 
-import { AppRuntime } from '@/App/providers'
-
-import { getCommitment } from '@/entities/commitment'
-import { getCommitments } from '@/entities/commitment'
-
-import type { CommitmentBase } from '@/entities/commitment'
-import type { CommitmentDetail } from '@/entities/commitment'
+import { useCommitmentsQuery, useCommitmentQuery } from '@/entities/commitment'
 
 export const CommitmentListPage = () => {
-  const [commitments, setCommitments] = useState<ReadonlyArray<CommitmentBase>>(
-    [],
-  )
+  const [selectedId, setSelectedId] = useState<string | null>(null)
 
-  const [selectedCommitment, setSelectedCommitment] =
-    useState<CommitmentDetail | null>(null)
+  const { data: commitments = [] } = useCommitmentsQuery()
 
-  const [isLoading, setIsLoading] = useState(false)
-
-  useEffect(() => {
-    AppRuntime.runPromise(getCommitments)
-      .then(setCommitments)
-      .catch(console.error)
-  }, [])
-
-  const handleCommitmentClick = async (id: string) => {
-    try {
-      setIsLoading(true)
-
-      const commitment = await AppRuntime.runPromise(getCommitment(id))
-
-      setSelectedCommitment(commitment)
-    } catch (error) {
-      console.error(error)
-    } finally {
-      setIsLoading(false)
-    }
-  }
+  const { data: selectedCommitment, isLoading } = useCommitmentQuery(selectedId)
 
   return (
     <div>
@@ -45,10 +16,7 @@ export const CommitmentListPage = () => {
       <ul>
         {commitments.map((commitment) => (
           <li key={commitment.id}>
-            <button
-              type="button"
-              onClick={() => handleCommitmentClick(commitment.id)}
-            >
+            <button type="button" onClick={() => setSelectedId(commitment.id)}>
               {commitment.title}
             </button>
           </li>
@@ -62,12 +30,6 @@ export const CommitmentListPage = () => {
           <h2>{selectedCommitment.title}</h2>
 
           <p>{selectedCommitment.description}</p>
-
-          <p>Status: {selectedCommitment.status}</p>
-
-          <p>End date: {selectedCommitment.end_date}</p>
-
-          <p>Created at: {selectedCommitment.created_at}</p>
         </section>
       )}
     </div>

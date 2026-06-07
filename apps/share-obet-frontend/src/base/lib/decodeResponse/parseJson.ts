@@ -1,8 +1,5 @@
 import { Effect } from "effect";
-
-import {
-  DecodeError,
-} from "../setup";
+import { DecodeError } from '../../__shape'
 
 export const parseJson = (
   response: Response,

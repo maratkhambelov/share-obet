@@ -1,28 +1,12 @@
-import { Context, Effect, Layer } from 'effect'
+import {  Effect, Layer } from 'effect'
 
 import {
-  type ApiError,
   DecodeError,
   NetworkError,
   UnexpectedStatusError,
-} from './apiErrors'
+  HttpClient
+} from '../__shape'
 import { ApiConfig } from './apiConfig'
-
-export interface HttpClientShape {
-  readonly request: (
-    request: RequestInit & {
-      readonly path: string;
-    },
-  ) => Effect.Effect<
-    Response,
-    ApiError,
-    ApiConfig
-  >;
-}
-
-export class HttpClient extends Context.Tag(
-  "HttpClient",
-)<HttpClient, HttpClientShape>() {}
 
 export const HttpClientLive = Layer.succeed(
   HttpClient,

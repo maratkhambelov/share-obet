@@ -1,7 +1,7 @@
 import { Effect, Schema } from 'effect'
 import { CommitmentBaseSchema } from './base.ts'
-import { HttpClient } from '@/base/setup'
-import { decodeResponse } from '@/base/lib'
+import { HttpClient } from '../../__shape'
+import { decodeResponse } from '../../lib'
 
 export const CommitmentDetailSchema = Schema.extend(
   CommitmentBaseSchema,

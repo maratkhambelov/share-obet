@@ -1,6 +1,6 @@
 import { Effect, Schema } from 'effect'
-import { HttpClient } from '@/base/setup'
-import { decodeResponse } from '@/base/lib'
+import { HttpClient } from '../../__shape'
+import { decodeResponse } from '../../lib'
 import { CommitmentBaseSchema } from './base'
 
 export const CommitmentListResponseSchema = Schema.Struct({
@@ -11,7 +11,7 @@ export type CommitmentListResponse = Schema.Schema.Type<
   typeof CommitmentListResponseSchema
 >
 
-export const getCommitments = Effect.gen(function* () {
+export const getCommitmentList = Effect.gen(function* () {
   const httpClient = yield* HttpClient
 
   const response = yield* httpClient.request({

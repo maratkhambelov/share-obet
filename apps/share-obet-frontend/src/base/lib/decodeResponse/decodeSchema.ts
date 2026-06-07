@@ -1,4 +1,4 @@
-import { DecodeError } from '../setup'
+import { DecodeError } from '../../__shape'
 import { Effect, Schema } from 'effect'
 
 export const decodeSchema = <A, I /* ifContextShouldAdd, R */>(

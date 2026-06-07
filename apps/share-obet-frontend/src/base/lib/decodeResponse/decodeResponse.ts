@@ -1,6 +1,6 @@
-import { decodeSchema } from '@/base/lib/decodeSchema.ts'
+import { decodeSchema } from './decodeSchema.ts'
 import { Effect, Schema } from 'effect'
-import { parseJson } from '@/base/lib/parseJson.ts'
+import { parseJson } from './parseJson.ts'
 
 export const decodeResponse = <A, I>(
   response: Response,
