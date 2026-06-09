@@ -23,7 +23,10 @@ use crate::{
     presentation::http::commitment::get_commitment::get_commitment
 
 };
+use crate::application::authenticate_telegram_user::AuthenticateTelegramUser;
 use crate::application::get_commitment::GetCommitment;
+use crate::infrastructure::repository::in_memory::user_repository::InMemoryUserRepository;
+use crate::presentation::http::auth::authenticate_telegram;
 
 #[tokio::main]
 async fn main() {
@@ -31,6 +34,11 @@ async fn main() {
     let repository = Arc::new(
         InMemoryCommitmentRepository::new(),
     );
+
+    let user_repository = Arc::new(
+        InMemoryUserRepository::new(),
+    );
+
 
     let create_commitment_use_case  = Arc::new(
         CreateCommitment::new(repository.clone()),
@@ -42,11 +50,17 @@ async fn main() {
     let get_commitment_use_case  = Arc::new(
         GetCommitment::new(repository.clone()),
     );
-
+    let authenticate_telegram_user =
+        Arc::new(
+            AuthenticateTelegramUser::new(
+                user_repository.clone(),
+            ),
+        );
     let state = Arc::new(AppState {
         create_commitment: create_commitment_use_case,
         get_commitments: get_commitments_use_case,
-        get_commitment: get_commitment_use_case
+        get_commitment: get_commitment_use_case,
+        authenticate_telegram_user: authenticate_telegram_user
     });
 
     let app = Router::new()
@@ -62,6 +76,10 @@ async fn main() {
         .route(
             "/commitments/{id}",
             get(get_commitment),
+        )
+        .route(
+            "/auth/telegram",
+            post(authenticate_telegram),
         )
         .layer(CorsLayer::permissive())
         .with_state(state);

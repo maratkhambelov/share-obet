@@ -2,85 +2,59 @@ use chrono::{DateTime, Utc};
 use uuid::Uuid;
 
 pub type UserId = Uuid;
+pub type UserIdentityId = Uuid;
+pub type WalletId = Uuid;
 
-
+#[derive(Debug, Clone)]
 pub struct User {
     pub id: UserId,
 
-    pub username: String,
+    pub telegram_id: String,
+
+    pub display_name: String,
 
     pub created_at: DateTime<Utc>,
 }
 
-pub struct UserIdentity {
+#[derive(Debug, Clone)]
+pub struct Wallet {
+    pub id: WalletId,
+
     pub user_id: UserId,
 
-    pub provider: AuthProvider,
+    pub network: WalletNetwork,
 
-    pub external_id: String,
+    pub address: String,
+
+    pub created_at: DateTime<Utc>,
 }
 
-pub enum AuthProvider {
-    Telegram,
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum WalletNetwork {
+    Ton,
 }
+// #[derive(Debug, Clone)]
+// pub struct UserIdentity {
+//     pub id: UserIdentityId,
+//
+//     pub user_id: UserId,
+//
+//     pub provider: AuthProvider,
+//
+//     /// Идентификатор пользователя
+//     /// во внешней системе.
+//     ///
+//     /// Например:
+//     /// Telegram -> "123456789"
+//     pub external_id: String,
+//
+//     pub created_at: DateTime<Utc>,
+// }
 
-// type UserId = Uuid;
-// type ContractId = Uuid;
-// type ContractParticipantId = Uuid;
-//
-// struct Contract {
-//     id: ContractId,
-//
-//     promisor_id: UserId,
-//
-//     title: String,
-//     description: String,
-//
-//     created_at: DateTime<Utc>,
-//     end_date: DateTime<Utc>,
-//
-//     status: ContractStatus,
-// }
-//
-//
-// struct ContractParticipant {
-//     id: ContractParticipantId,
-//     contract_id: ContractId,
-//     user_id: UserId,
-//     role: ContractParticipantRole ,
-// }
-//
-// enum ContractParticipantRole {
-//     Witness,
-//     Verifier,
-// }
-// enum ContractStatus {
-//     Draft,
-//     // PendingFunding,
-//     // PendingLaunch,
-//     Active,
-//     VerificationPending,
-//     Completed,
-//     Failed,
-//     Terminated,
-// }
-//
-// struct User {
-//     id: UserId,
-//
-//     username: String,
-//
-//     created_at: DateTime<Utc>,
-// }
-//
-// struct UserIdentity {
-//     user_id: UserId,
-//
-//     provider: AuthProvider,
-//
-//     external_id: String,
-// }
-//
-// enum AuthProvider {
+
+// #[derive(Debug, Clone, Copy, PartialEq, Eq)]
+// pub enum AuthProvider {
 //     Telegram,
 // }
+
+

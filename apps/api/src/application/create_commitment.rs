@@ -12,10 +12,6 @@ use crate::{
 use crate::domain::commitment::{Commitment, CommitmentStatus};
 use crate::domain::user::UserId;
 
-pub struct CreateCommitment {
-    repository:
-        Arc<InMemoryCommitmentRepository>,
-}
 
 // #[derive(Deserialize)]
 pub struct CreateCommitmentInput {
@@ -31,6 +27,12 @@ pub struct CreateCommitmentInput {
 
     pub end_date: DateTime<Utc>,
 }
+
+pub struct CreateCommitment {
+    repository:
+        Arc<InMemoryCommitmentRepository>,
+}
+
 
 impl CreateCommitment {
     pub fn new(

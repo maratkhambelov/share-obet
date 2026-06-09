@@ -53,16 +53,4 @@ impl InMemoryCommitmentRepository {
     
         commitments.get(&id).cloned()
     }
-    //
-    // pub async fn list(
-    //     &self,
-    // ) -> Vec<Commitment> {
-    //     let commitments =
-    //         self.commitments.read().await;
-    //
-    //     commitments
-    //         .values()
-    //         .cloned()
-    //         .collect()
-    // }
 }
