@@ -6,6 +6,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/shared/ui/card'
+import { useRawInitData } from '@tma.js/sdk-react'
 
 type CommitmentListPageProps = {
   readonly onCreate: () => void
@@ -18,8 +19,11 @@ export const CommitmentListPage = ({
                                      onCreate,
                                      onOpen,
                                    }: CommitmentListPageProps) => {
+
+  const initData = useRawInitData() ?? ''
+
   const { data: commitments = [] } =
-    useCommitmentsQuery()
+    useCommitmentsQuery(initData)
 
   return (
     <div className="space-y-6">

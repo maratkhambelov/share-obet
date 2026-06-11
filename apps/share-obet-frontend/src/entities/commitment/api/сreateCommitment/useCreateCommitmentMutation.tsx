@@ -5,9 +5,9 @@ import {
 } from '@/base/domains/Commitment'
 import { runEffect } from '@/base/lib'
 
-export const useCreateCommitmentMutation = () => {
+export const useCreateCommitmentMutation = (initData: string) => {
   return useMutation({
     mutationFn: (request: CreateCommitment) =>
-      runEffect(createCommitment(request)),
+      runEffect(createCommitment(request, initData)),
   })
 }

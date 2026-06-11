@@ -9,6 +9,7 @@ import { Button } from '@/shared/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/card'
 import { Input } from '@/shared/ui/input'
 import { Textarea } from '@/shared/ui/textarea'
+import { useRawInitData } from '@tma.js/sdk-react'
 
 type CommitmentPageProps = {
   readonly commitmentId?: string
@@ -19,12 +20,15 @@ export const CommitmentPage = ({
   commitmentId,
   onBack,
 }: CommitmentPageProps) => {
-  const isCreateMode = commitmentId === undefined
+
+  const initData = useRawInitData() ?? ''
 
   const { data: commitment, isLoading } = useCommitmentQuery(
     commitmentId ?? null,
+    initData
   )
-  const createCommitment = useCreateCommitmentMutation()
+
+  const createCommitment = useCreateCommitmentMutation(initData)
   const [title, setTitle] = useState('')
   const [description, setDescription] = useState('')
 
@@ -46,7 +50,16 @@ export const CommitmentPage = ({
     })
   }, [createCommitment, description, onBack, title])
 
-  if (isCreateMode) {
+  if (isLoading) {
+    return (
+      <div className="mx-auto max-w-2xl p-6">
+        <p className="mt-4">Loading...</p>
+      </div>
+    )
+  }
+
+
+  if (!commitmentId || !commitment) {
     return (
       <div className="mx-auto max-w-2xl space-y-6 p-6">
         <Button variant="outline" onClick={onBack}>
@@ -90,27 +103,17 @@ export const CommitmentPage = ({
     )
   }
 
-  if (isLoading) {
-    return (
-      <div className="mx-auto max-w-2xl p-6">
-        <Button variant="outline" onClick={onBack}>
-          Назад
-        </Button>
-        <p className="mt-4">Loading...</p>
-      </div>
-    )
-  }
 
-  if (!commitment) {
-    return (
-      <div className="mx-auto max-w-2xl p-6">
-        <Button variant="outline" onClick={onBack}>
-          Назад
-        </Button>
-        <p className="mt-4">Commitment not found</p>
-      </div>
-    )
-  }
+  // if (!commitment) {
+  //   return (
+  //     <div className="mx-auto max-w-2xl p-6">
+  //       <Button variant="outline" onClick={onBack}>
+  //         Назад
+  //       </Button>
+  //       <p className="mt-4">Commitment not found</p>
+  //     </div>
+  //   )
+  // }
 
   return (
     <div className="mx-auto max-w-2xl space-y-6 p-6">

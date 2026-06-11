@@ -11,12 +11,12 @@ import { runEffect } from '@/base/lib'
 //     enabled: Boolean(id),
 //   })
 
-export const useCommitmentQuery = (id: string | null) => {
+export const useCommitmentQuery = (id: string | null, initData: string) => {
 
   const QUERY_PARAMS = id
     ? {
         queryKey: commitmentKeys.detail(id),
-        queryFn: () => runEffect(getCommitment(id)),
+        queryFn: () => runEffect(getCommitment(id, initData)),
       } as const
     : {
         queryKey: commitmentKeys.detail('__skipToken__'),

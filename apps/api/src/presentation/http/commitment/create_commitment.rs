@@ -7,6 +7,7 @@ use serde::{Deserialize, Serialize};
 use crate::application::create_commitment::CreateCommitmentInput;
 use crate::app_state::AppState;
 use crate::domain::commitment::{ CommitmentId};
+use crate::presentation::http::auth::current_user_extractor::CurrentUser;
 
 #[derive(Deserialize)]
 pub struct CreateCommitmentRequest {
@@ -28,8 +29,14 @@ pub struct CreateCommitmentResponse {
 
 pub async fn create_commitment(
     State(state): State<Arc<AppState>>,
+    current_user: CurrentUser,
     Json(request): Json<CreateCommitmentRequest>,
 ) -> (StatusCode, Json<CreateCommitmentResponse>) {
+    println!(
+        "current user id = {}",
+        current_user.id,
+    );
+
     let input = CreateCommitmentInput {
         // promisor_id: current_user_id, // будем доставать позднее из JWT
         promisor_id: UserId::new_v4(),

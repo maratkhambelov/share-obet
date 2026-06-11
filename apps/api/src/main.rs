@@ -1,13 +1,17 @@
+
+
 pub mod application;
 pub mod domain;
 pub mod infrastructure;
 pub mod presentation;
 pub mod app_state;
+pub mod config;
 
 use std::sync::{Arc};
 use axum::{routing::get, Router};
 use axum::routing::post;
 use tower_http::cors::CorsLayer;
+use dotenvy::dotenv;
 
 async fn health() -> &'static str {
     "OK"
@@ -25,11 +29,17 @@ use crate::{
 };
 use crate::application::authenticate_telegram_user::AuthenticateTelegramUser;
 use crate::application::get_commitment::GetCommitment;
+use crate::config::Config;
 use crate::infrastructure::repository::in_memory::user_repository::InMemoryUserRepository;
-use crate::presentation::http::auth::authenticate_telegram;
+use crate::infrastructure::telegram::telegram_auth_validator::TelegramAuthValidator;
+use crate::presentation::http::auth::authenticate_telegram::authenticate_telegram;
+
 
 #[tokio::main]
 async fn main() {
+    dotenv().ok();
+
+    let config = Config::load();
 
     let repository = Arc::new(
         InMemoryCommitmentRepository::new(),
@@ -39,6 +49,12 @@ async fn main() {
         InMemoryUserRepository::new(),
     );
 
+    let telegram_auth_validator =
+        Arc::new(
+            TelegramAuthValidator::new(
+                config.telegram_bot_token,
+            ),
+        );
 
     let create_commitment_use_case  = Arc::new(
         CreateCommitment::new(repository.clone()),
@@ -60,7 +76,8 @@ async fn main() {
         create_commitment: create_commitment_use_case,
         get_commitments: get_commitments_use_case,
         get_commitment: get_commitment_use_case,
-        authenticate_telegram_user: authenticate_telegram_user
+        authenticate_telegram_user: authenticate_telegram_user,
+        telegram_auth_validator: telegram_auth_validator
     });
 
     let app = Router::new()

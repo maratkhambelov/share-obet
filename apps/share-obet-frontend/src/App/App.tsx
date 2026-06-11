@@ -1,18 +1,49 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Match } from 'effect'
+import { useRawInitData } from '@tma.js/sdk-react'
 
 import { CommitmentListPage, CommitmentPage } from '@/pages'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { runEffect } from '@/base/lib'
+import { authenticateTelegram } from '@/base/api'
+import {currentUserQueryKey} from "@/base/domains/User";
 
 type Screen =
   | {
-  type: 'COMMITMENT_LIST'
-}
+      type: 'COMMITMENT_LIST'
+    }
   | {
-  type: 'COMMITMENT'
-  commitmentId?: string
-}
+      type: 'COMMITMENT'
+      commitmentId?: string
+    }
 
 function App() {
+  const initData = useRawInitData()
+  const queryClient = useQueryClient()
+
+  const { mutateAsync: authMutate } = useMutation({
+    mutationFn: (rawInitData: string) =>
+      runEffect(
+        authenticateTelegram({
+          init_data: rawInitData,
+        }),
+      ),
+    onSuccess: async (data) => {
+      queryClient.setQueryData(currentUserQueryKey, {
+        userId: data.user_id,
+        displayName: data.display_name,
+      })
+    },
+  })
+
+  useEffect(() => {
+    if (!initData) {
+      return
+    }
+
+    void authMutate(initData)
+  }, [authMutate, initData])
+
   const [screen, setScreen] = useState<Screen>({
     type: 'COMMITMENT_LIST',
   })
@@ -58,7 +89,6 @@ function App() {
 }
 
 export default App
-
 
 // import {useEffect} from 'react'
 // import './App.css'

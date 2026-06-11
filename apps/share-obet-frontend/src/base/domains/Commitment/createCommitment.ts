@@ -1,6 +1,6 @@
 import { Effect, Schema } from 'effect'
 import { HttpClient } from '../../__shape'
-import { decodeResponse } from '../../lib'
+import { createTelegramHeaders, decodeResponse } from '../../lib'
 
 export const CreateCommitmentSchema = Schema.Struct({
   verifier_id: Schema.String,
@@ -12,11 +12,15 @@ export const CreateCommitmentSchema = Schema.Struct({
 
 export type CreateCommitment = Schema.Schema.Type<typeof CreateCommitmentSchema>
 
-export const createCommitment = (request: CreateCommitment) => {
+export const createCommitment = (
+  request: CreateCommitment,
+  initData: string,
+) => {
   const effect = HttpClient.pipe(
     Effect.flatMap((http) =>
       http.request({
         headers: {
+          ...createTelegramHeaders(initData),
           'Content-Type': 'application/json',
         },
         method: 'POST',

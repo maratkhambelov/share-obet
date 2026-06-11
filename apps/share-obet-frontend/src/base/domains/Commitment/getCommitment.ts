@@ -1,7 +1,7 @@
 import { Effect, Schema } from 'effect'
 import { CommitmentBaseSchema } from './base.ts'
 import { HttpClient } from '../../__shape'
-import { decodeResponse } from '../../lib'
+import { createTelegramHeaders, decodeResponse } from '../../lib'
 
 export const CommitmentDetailSchema = Schema.extend(
   CommitmentBaseSchema,
@@ -16,11 +16,12 @@ export const CommitmentDetailSchema = Schema.extend(
 
 export type CommitmentDetail = Schema.Schema.Type<typeof CommitmentDetailSchema>
 
-export const getCommitment = (id: string) =>
+export const getCommitment = (id: string, initData: string) =>
   Effect.gen(function* () {
     const httpClient = yield* HttpClient
 
     const response = yield* httpClient.request({
+      headers: createTelegramHeaders(initData),
       path: `/commitments/${id}`,
       method: 'GET',
     })
