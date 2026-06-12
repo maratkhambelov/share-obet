@@ -10,6 +10,7 @@ use axum::{routing::get, Router};
 use axum::routing::post;
 use tower_http::cors::CorsLayer;
 use dotenvy::dotenv;
+use sqlx::PgPool;
 
 async fn health() -> &'static str {
     "OK"
@@ -28,23 +29,29 @@ use crate::{
 use crate::application::authenticate_telegram_user::AuthenticateTelegramUser;
 use crate::application::get_commitment::GetCommitment;
 use crate::config::Config;
-use crate::infrastructure::repository::in_memory::user_repository::InMemoryUserRepository;
 use crate::infrastructure::telegram::telegram_auth_validator::TelegramAuthValidator;
 use crate::presentation::http::auth::authenticate_telegram::authenticate_telegram;
-
+use crate::infrastructure::repository::postgres::user_repository::PostgresUserRepository;
 
 #[tokio::main]
 async fn main() {
     dotenv().ok();
-
     let config = Config::load();
+
+    let db = PgPool::connect(
+        &config.database_url,
+    )
+    .await
+    .unwrap();
+
+    println!("Database connected");
 
     let repository = Arc::new(
         InMemoryCommitmentRepository::new(),
     );
 
     let user_repository = Arc::new(
-        InMemoryUserRepository::new(),
+        PostgresUserRepository::new(db.clone()),
     );
 
     let telegram_auth_validator =

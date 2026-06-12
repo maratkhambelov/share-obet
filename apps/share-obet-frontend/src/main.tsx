@@ -36,7 +36,7 @@ if (import.meta.env.DEV) {
     })],
     ['signature', ''],
     ['auth_date', '1781123004238'],
-    ['hash', 'a150b97a3a0df85e70fa424391d6d316f7610be40615ea910f1b94e9706ff1de'],
+    ['hash', '00f7a7d491517987bc5753bee5bedb304843034009103e78be61292f4ad5eae0'],
   ])
 
   console.log(initDataRaw.toString())

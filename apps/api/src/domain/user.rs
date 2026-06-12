@@ -33,28 +33,3 @@ pub struct Wallet {
 pub enum WalletNetwork {
     Ton,
 }
-// #[derive(Debug, Clone)]
-// pub struct UserIdentity {
-//     pub id: UserIdentityId,
-//
-//     pub user_id: UserId,
-//
-//     pub provider: AuthProvider,
-//
-//     /// Идентификатор пользователя
-//     /// во внешней системе.
-//     ///
-//     /// Например:
-//     /// Telegram -> "123456789"
-//     pub external_id: String,
-//
-//     pub created_at: DateTime<Utc>,
-// }
-
-
-// #[derive(Debug, Clone, Copy, PartialEq, Eq)]
-// pub enum AuthProvider {
-//     Telegram,
-// }
-
-

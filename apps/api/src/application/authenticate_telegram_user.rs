@@ -3,8 +3,8 @@ use chrono::Utc;
 use uuid::Uuid;
 use crate::{
     domain::user::User,
-    infrastructure::repository::in_memory::user_repository::InMemoryUserRepository,
-};
+ };
+use crate::domain::user_repository::UserRepository;
 
 pub struct AuthenticateTelegramUserRequest {
     pub telegram_id: String,
@@ -15,15 +15,15 @@ pub struct AuthenticateTelegramUserResponse {
     pub user: User,
 }
 
-pub struct AuthenticateTelegramUser{
-    pub repository:
-        Arc<InMemoryUserRepository>,
-}
 
+pub struct AuthenticateTelegramUser {
+    pub repository:
+        Arc<dyn UserRepository>,
+}
 impl AuthenticateTelegramUser {
     pub fn new(
         repository:
-        Arc<InMemoryUserRepository>,
+        Arc<dyn UserRepository>,
     ) -> Self {
         Self { repository }
     }
