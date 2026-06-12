@@ -6,6 +6,7 @@ use crate::{
 use crate::application::authenticate_telegram_user::AuthenticateTelegramUser;
 use crate::application::get_commitments::GetCommitments;
 use crate::application::get_commitment::GetCommitment;
+use crate::domain::user_repository::UserRepository;
 use crate::infrastructure::telegram::telegram_auth_validator::TelegramAuthValidator;
 
 pub struct AppState {
@@ -16,4 +17,7 @@ pub struct AppState {
         Arc<AuthenticateTelegramUser>,
     pub telegram_auth_validator:
         Arc<TelegramAuthValidator>,
+    pub user_repository:
+        Arc<dyn UserRepository>,
+
 }

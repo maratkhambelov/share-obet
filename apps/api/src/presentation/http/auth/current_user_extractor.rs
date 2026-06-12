@@ -1,5 +1,5 @@
 use std::sync::Arc;
-
+use crate::domain::user::UserId;
 use axum::{
     extract::{FromRef, FromRequestParts},
     http::{request::Parts, StatusCode},
@@ -11,7 +11,7 @@ use crate::{
 
 #[derive(Debug, Clone)]
 pub struct CurrentUser {
-    pub id: String,
+    pub id: UserId,
 }
 
 const TELEGRAM_INIT_DATA_HEADER: &str =
@@ -52,8 +52,18 @@ for CurrentUser
                 StatusCode::UNAUTHORIZED
             })?;
 
+        let user = state
+            .user_repository
+            .find_by_telegram_id(
+                &auth_data.telegram_id,
+            )
+            .await
+            .ok_or(
+                StatusCode::UNAUTHORIZED,
+            )?;
+
         Ok(CurrentUser {
-            id: auth_data.telegram_id,
+            id: user.id,
         })
     }
 }

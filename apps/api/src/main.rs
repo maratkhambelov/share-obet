@@ -82,7 +82,9 @@ async fn main() {
         get_commitments: get_commitments_use_case,
         get_commitment: get_commitment_use_case,
         authenticate_telegram_user: authenticate_telegram_user,
-        telegram_auth_validator: telegram_auth_validator
+        telegram_auth_validator: telegram_auth_validator,
+
+        user_repository: user_repository,
     });
 
     let app = Router::new()

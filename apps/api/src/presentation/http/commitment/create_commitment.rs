@@ -38,8 +38,7 @@ pub async fn create_commitment(
     );
 
     let input = CreateCommitmentInput {
-        // promisor_id: current_user_id, // будем доставать позднее из JWT
-        promisor_id: UserId::new_v4(),
+        promisor_id: current_user.id,
 
         verifier_id: request.verifier_id,
 
